@@ -1,0 +1,23 @@
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor
+from pybricks.parameters import Color, Direction, Port, Side, Stop
+from pybricks.robotics import DriveBase
+from pybricks.tools import wait, run_task
+
+def turn():
+    global hub
+    hub = PrimeHub()
+    right_motor = Motor(Port.B, Direction.CLOCKWISE)
+    left_motor = Motor(Port.D, Direction.COUNTERCLOCKWISE)
+    global mydrivebase
+    mydrivebase = DriveBase(left_motor = left_motor, right_motor = right_motor, wheel_diameter = 52, axle_track = 155)
+    hub.imu.reset_heading(0)
+
+run_task(turn())
+angle = mydrivebase.angle()
+while angle < 90:
+    angle = mydrivebase.angle()
+    mydrivebase.drive(speed = 0, turn_rate = -90)
+mydrivebase.stop
+
+angle = mydrivebase.angle()
