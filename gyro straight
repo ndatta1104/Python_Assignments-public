@@ -1,0 +1,32 @@
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor
+from pybricks.parameters import Direction, Port
+from pybricks.robotics import DriveBase
+from pybricks.tools import run_task, wait
+
+hub = PrimeHub()
+right_motor = Motor(Port.E, Direction.COUNTERCLOCKWISE)
+left_motor = Motor(Port.F, Direction.CLOCKWISE)
+
+robot = DriveBase(left_motor, right_motor, wheel_diameter=52, axle_track=136)
+
+
+hub.imu.reset_heading(0)
+robot.reset()
+
+
+def gyro_correction():
+    while True:
+        heading = hub.imu.heading()
+        if heading < -1:
+            robot.turn(1)  # Turn right slowly
+        elif heading > 1:
+            robot.turn(-1)  # Turn left slowly
+        wait(10)  # Small delay to prevent CPU overload
+
+run_task(gyro_correction)
+
+
+while True:
+    robot.drive(300, 0)  # Drive forward at 300 mm/s with 0 turning
+    wait(10)
